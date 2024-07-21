@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApp.Server", "NoteApp.Server\NoteApp.Server.csproj", "{8DB7CCCF-9905-4579-815A-3E047778535F}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "noteapp.client", "noteapp.client\noteapp.client.esproj", "{2A1FD767-B562-447F-AC43-6FD438E80252}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DB7CCCF-9905-4579-815A-3E047778535F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB7CCCF-9905-4579-815A-3E047778535F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DB7CCCF-9905-4579-815A-3E047778535F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB7CCCF-9905-4579-815A-3E047778535F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1FD767-B562-447F-AC43-6FD438E80252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1FD767-B562-447F-AC43-6FD438E80252}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1FD767-B562-447F-AC43-6FD438E80252}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2A1FD767-B562-447F-AC43-6FD438E80252}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1FD767-B562-447F-AC43-6FD438E80252}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1FD767-B562-447F-AC43-6FD438E80252}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFB0E10D-0327-4C12-8263-B2B9C64DFD04}
+	EndGlobalSection
+EndGlobal
