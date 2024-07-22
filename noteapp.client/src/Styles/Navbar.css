@@ -1,0 +1,24 @@
+.nav-bar{
+    background-color: lightgray;
+    margin: 0;
+    display: flex;
+    padding: 20px;
+}
+h3{
+    margin:0;
+}
+.nav-bar div{
+    display: inline-block;
+}
+.nav-title{
+    padding-left: 10px;
+    text-align: left;
+    flex:1;
+}
+.nav-links{
+    float: right;
+    padding-right: 10px;
+}
+.nav-link{
+    margin-left:20px;
+}

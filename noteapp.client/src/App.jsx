@@ -5,6 +5,7 @@ import Login from './Pages/Login.jsx'
 import Register from './Pages/Register.jsx'
 import './App.css';
 import Navbar from './Components/Navbar.jsx'
+import Authorize from './Components/Authorize.jsx';
 
 function App() {
     return (<>
@@ -20,7 +21,7 @@ const Content = () => {
 
     return (
         <div>
-            {showNavbar && <Navbar />}
+            {showNavbar && <Authorize><Navbar /></Authorize>}
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
