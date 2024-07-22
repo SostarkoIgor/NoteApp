@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import '../Styles/Login.css'
 
 function Login() {
     const [email, setEmail] = useState("")
@@ -44,7 +45,11 @@ function Login() {
     return (
     <>
         <div className="form-container">
-                <h3>Login</h3>
+            <div className='title-div'>
+            <h2>Login</h2>
+            <h4>Login to access your notes</h4>
+            </div>
+                
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label className="form-label" htmlFor="email">
@@ -65,11 +70,11 @@ function Login() {
                     <div>
                     <button type="submit">Login</button>
                     </div>
-                    <div>
+                    <div className='link-class'>
                         <a onClick={()=>navigator("/register") }>Register</a>
                     </div>
                     <div>
-                        <p className="login-message">
+                        <p className="submit-message">
                             {message}
                         </p>
                     </div>

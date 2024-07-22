@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import '../Styles/Login.css'
 
 function Register() {
 
@@ -47,7 +48,10 @@ function Register() {
   return (
       <>
           <div className="form-container">
-              <h3>Register</h3>
+          <div className='title-div'>
+            <h2>Register</h2>
+            <h4>Register to to start making notes</h4>
+            </div>
               <form onSubmit={handleSubmit}>
                   <div>
                       <label className="form-label" htmlFor="email">
@@ -65,17 +69,20 @@ function Register() {
                   <div>
                       <input type="password" id="password-form" name="password" value={password} onChange={onChange} />
                   </div>
+                  <label htmlFor="password" className="form-label">
+                          Repeat password:
+                      </label>
                   <div>
                       <input type="password" id="cpassword-form" name="cpassword" value={cPassword} onChange={onChange} />
                   </div>
                   <div>
                       <button type="submit">Register</button>
                   </div>
-                  <div>
+                  <div className='link-class'>
                       <a onClick={()=>navigator("/login")}>Login</a>
                   </div>
                   <div>
-                      <p className="login-error">
+                      <p className="submit-message">
                           {error}
                       </p>
                   </div>
