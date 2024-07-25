@@ -6,6 +6,7 @@ import Register from './Pages/Register.jsx'
 import './App.css';
 import Navbar from './Components/Navbar.jsx'
 import Authorize from './Components/Authorize.jsx';
+import CreateEditNote from './Pages/CreateEditNote.jsx';
 
 function App() {
     return (<>
@@ -25,6 +26,7 @@ const Content = () => {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/createeditnote" element={<CreateEditNote />} />
                 <Route path="/" element={<Home />} />
             </Routes>
         </div>
