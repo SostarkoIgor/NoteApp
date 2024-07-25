@@ -1,5 +1,6 @@
 // ImageUploader.jsx
 import React, { useEffect, useState } from 'react';
+import '../Styles/ImageLoader.css'
 
 function ImageLoader({updateFormImage, initialImg}) {
   const [imageBase64, setImageBase64] = useState(null)
@@ -9,14 +10,14 @@ function ImageLoader({updateFormImage, initialImg}) {
     if (initialImg) {
         setImageBase64(initialImg)
     }
-  })
+  }, [initialImg])
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     const reader = new FileReader()
 
     reader.onloadend = () => {
         setImageBase64(reader.result)
-        updateFormImage(imageBase64)
+        updateFormImage(reader.result)
     }
       
 
@@ -31,7 +32,7 @@ function ImageLoader({updateFormImage, initialImg}) {
 
   return (
     <>
-    <div>
+    <div className="image-uploader">
       <input
         type="file"
         accept="image/*"
@@ -39,7 +40,7 @@ function ImageLoader({updateFormImage, initialImg}) {
       />
       {imageBase64 && (
         <div>
-          <div>
+          <div className="image-container">
             <img
               src={imageBase64}
               alt="Uploaded"
@@ -49,7 +50,7 @@ function ImageLoader({updateFormImage, initialImg}) {
           <div className="error-message">{errorMessage}</div>
         </div>
       )}
-    </div>
+          </div>
     </>
   );
 }
