@@ -18,6 +18,7 @@ function ImageLoader({updateFormImage, initialImg}) {
     reader.onloadend = () => {
         setImageBase64(reader.result)
         updateFormImage(reader.result)
+        setErrorMessage("")
     }
       
 
@@ -38,8 +39,10 @@ function ImageLoader({updateFormImage, initialImg}) {
         accept="image/*"
         onChange={handleImageChange}
       />
+
       {imageBase64 && (
         <div>
+          {errorMessage=="" &&
           <div className="image-container">
             <img
               src={imageBase64}
@@ -47,9 +50,10 @@ function ImageLoader({updateFormImage, initialImg}) {
               className="image-preview"
             />
           </div>
-          <div className="error-message">{errorMessage}</div>
+          }
         </div>
       )}
+      <div className="error-message">{errorMessage}</div>
           </div>
     </>
   );
