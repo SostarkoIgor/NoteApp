@@ -20,6 +20,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<INoteService, NoteService>();
+builder.Services.AddScoped<INoteUserService, NoteUserService>();
 
 var app = builder.Build();
 
