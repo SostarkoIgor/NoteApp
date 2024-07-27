@@ -1,6 +1,9 @@
 import '../Styles/SmallNote.css';
+import { useNavigate } from 'react-router-dom';
 
-function SmallNote({image, title, datecr, dateedit}) {
+function SmallNote({index, image, title, datecr, dateedit}) {
+
+  const navigate = useNavigate();
 
   const formatDate = (date_) => {
     if (date_ === null) return "Never";
@@ -16,7 +19,7 @@ function SmallNote({image, title, datecr, dateedit}) {
       <h3 className="small-note-title">{title}</h3>
       <p className="small-note-date">Created: {formatDate(datecr)}</p>
       <p className="small-note-date">Edited: {formatDate(dateedit)}</p>
-      <button className="small-note-open">Open</button>
+      <button className="small-note-open" onClick={() => navigate(`/note/${index}`)}>Open</button>
       </div>
     </div>
   )

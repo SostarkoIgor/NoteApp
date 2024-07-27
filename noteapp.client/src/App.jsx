@@ -26,8 +26,8 @@ const Content = () => {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/createeditnote" element={<Authorize><CreateEditNote /></Authorize>} />
-                <Route path="/" element={<Authorize><Home /></Authorize>} />
+                <Route path="/createeditnote/:id?" element={<Authorize><CreateEditNote /></Authorize>} />
+                <Route path="/:id?" element={<Authorize><Home /></Authorize>} />
             </Routes>
         </div>
     );
