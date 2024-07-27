@@ -17,7 +17,8 @@ namespace NoteApp.Server.Services
         public async Task<IEnumerable<Note>> GetUserNotesAsync(User? user)
         {
             if (user == null) return new List<Note>();
-            return await _appDbContext.Notes.Where(n => n.Owner.Id == user.Id).ToListAsync();
+            return await _appDbContext.Notes.Where(n => n.Owner.Id == user.Id).Select(n => new Note
+            { Id = n.Id, Title = n.Title, DateCreated = n.DateCreated, DateUpdated = n.DateUpdated, Image=n.Image }).ToListAsync();
         }
     }
 }

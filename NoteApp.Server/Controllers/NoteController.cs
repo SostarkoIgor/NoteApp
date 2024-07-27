@@ -56,8 +56,9 @@ namespace NoteApp.Server.Controllers
 
             return CreatedAtAction(nameof(CreateOrEditNote), noteDto);
         }
+        [HttpGet("getusernotes")]
         [HttpGet("getusernotes/{mail}")]
-        public async Task<ActionResult<IEnumerable<Note>>> GetUserNotes(string mail)
+        public async Task<ActionResult<IEnumerable<Note>>> GetUserNotes(string? mail)
         {
             User? user;
             if (mail == null)
