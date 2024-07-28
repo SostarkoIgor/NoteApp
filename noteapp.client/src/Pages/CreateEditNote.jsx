@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ImageLoader from "../Components/ImageLoader.jsx"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import '../Styles/CreateEditNote.css'
 
 function CreateEditNote(){
@@ -9,12 +9,40 @@ function CreateEditNote(){
     const [title, setTitle] = useState("")
     const [text, setText] = useState("")
     const [formTitle, setFormTitle] = useState("Create Note")
+    const {id}=useParams()
+
+    useEffect(() => {
+        async function start() {
+            if (id) {
+                try{
+                let resp=await fetch("/api/Note/getnotebyid/"+id, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                if (resp.status==200) {
+                    let note=await resp.json()
+                    setTitle(note.title)
+                    setText(note.text)
+                    setImageBase64(note.image)
+                    setFormTitle("Edit Note")
+                }
+                }
+                catch(e) {
+                    console.log(e)
+                }
+            }
+        }
+        start()
+    }, [])
 
     const navigator = useNavigate()
 
-    const onSubmitForm = (e) => {
+    const onSubmitForm = async (e) => {
         e.preventDefault()
-        fetch("api/note/createoreditnote", {
+        let id_=id? id:""
+        await fetch("/api/Note/createoreditnote/"+id_, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -24,13 +52,13 @@ function CreateEditNote(){
                 text: text,
                 image: imageBase64
             })}).then(d => {
-                if (d.ok) {
+                if (d.status == 200) {
                     navigator("/")
                 }else {
-                    console.log("Error creating note."+e)
+                    console.log("Error creating/updating note.")
                 }
             }).catch(e => {
-                console.log("Error creating note."+e)
+                console.log("Error creating/updating note.")
             })
 
         }
@@ -44,7 +72,7 @@ function CreateEditNote(){
         <form onSubmit={onSubmitForm}>
             <div className="form-wrapper-div">
                 <div>
-                    <label for="title">Title</label>
+                    <label htmlFor="title">Title</label>
                 </div>
                 <div>
                     <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}/>
@@ -52,14 +80,14 @@ function CreateEditNote(){
             </div>
 
             <div className="form-wrapper-div">
-            <label for="text">Text</label>
+            <label htmlFor="text">Text</label>
 
             <textarea className="note-text-input" placeholder="Write a note..." value={text} onChange={(e) => setText(e.target.value)}></textarea>
             </div>
 
             <div className="form-wrapper-div">
-            <div><label for="image">Image</label></div>
-            <div><ImageLoader updateFormImage={updateFormImage}/></div>
+            <div><label htmlFor="image">Image</label></div>
+            <div><ImageLoader updateFormImage={updateFormImage} initialImg={imageBase64}/></div>
             </div>
 
             <input type="submit" value="Submit"></input>

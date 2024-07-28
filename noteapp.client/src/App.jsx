@@ -7,6 +7,7 @@ import './App.css';
 import Navbar from './Components/Navbar.jsx'
 import Authorize from './Components/Authorize.jsx';
 import CreateEditNote from './Pages/CreateEditNote.jsx';
+import ViewNote from './Pages/ViewNote.jsx';
 
 function App() {
     return (<>
@@ -26,6 +27,7 @@ const Content = () => {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/viewnote/:id" element={<Authorize><ViewNote /></Authorize>} />
                 <Route path="/createeditnote/:id?" element={<Authorize><CreateEditNote /></Authorize>} />
                 <Route path="/:id?" element={<Authorize><Home /></Authorize>} />
             </Routes>

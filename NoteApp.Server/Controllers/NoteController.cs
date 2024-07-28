@@ -82,10 +82,9 @@ namespace NoteApp.Server.Controllers
         [HttpGet("getusernotes/{mail}")]
         public async Task<ActionResult<IEnumerable<Note>>> GetUserNotes([FromRoute] string? mail)
         {
-            User? user;
+            User? user= await _userService.GetUserAsync();
             if (mail == null)
             {
-                user=await _userService.GetUserAsync();
                 if (user == null)
                 {
                     return NotFound("User not found.");
@@ -93,16 +92,15 @@ namespace NoteApp.Server.Controllers
                 var notes= await _noteService.GetUserNotesAsync(user);
                 return Ok(notes);
             }
-            else if (mail == (await _userService.GetUserAsync()).Email)
+            else if (mail == user.Email)
             {
-                user=await _userService.GetUserAsync();
                 var notes = await _noteService.GetUserNotesAsync(user);
                 return Ok(notes);
             }
             else return BadRequest("Implement later");
         }
         [HttpGet("getnotebyid/{id}")]
-        public async Task<ActionResult<Note>> GetNoteById(int? id)
+        public async Task<ActionResult<Note>> GetNoteById([FromRoute] int? id)
         {
             if (id == null)
             {
@@ -113,13 +111,17 @@ namespace NoteApp.Server.Controllers
             {
                 return NotFound("No note with given id found.");
             }
-            if (note.Owner.Id== (await _userService.GetUserAsync())?.Email)
+            if (note.Owner.Id== (await _userService.GetUserAsync())?.Id)
             {
                 return Ok(note);
             }
             else
             {
-                return BadRequest();
+                if (await _noteUserService.checkPermisionForViewAsync(id, await _userService.GetUserAsync()))
+                {
+                    return Ok(note);
+                }
+                else return Forbid("No permission to view this note.");
             }
         }
     }

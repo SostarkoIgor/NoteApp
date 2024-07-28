@@ -8,7 +8,7 @@ import SmallNote from '../Components/SmallNote.jsx';
 function Home() {
     const navigate=useNavigate()
     const userData=useContext(AuthData)
-    const [notes, setNotes]=useState([])
+    const [notes, setNotes]=useState()
     const [error, setError] = useState("")
     const { email } = useParams()
 
@@ -18,7 +18,10 @@ function Home() {
             let user=email?email:""
             try {
                 let resp = await fetch("/api/note/getusernotes"+user, {
-                    method: "GET"
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                 })
 
                 if (resp.status == 200) {
@@ -40,8 +43,9 @@ function Home() {
     }, [])
     return (
         <>
-        {error==="" && notes.map((note, index) => (
-            <SmallNote key={index} index={note.id} image={note.image} title={note.title} datecr={note.dateCreated} dateedit={note.DateUpdated}/>
+        {notes===undefined && <p>Loading...</p>}
+        {notes!=undefined && error==="" && notes.map((note, index) => (
+            <SmallNote key={index} index={note.id} image={note.image} title={note.title} datecr={note.dateCreated} dateedit={note.dateUpdated}/>
         ))}
             {error != "" && <p>{error}</p>}
         </>

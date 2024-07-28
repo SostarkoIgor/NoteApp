@@ -16,7 +16,8 @@ namespace NoteApp.Server.Services
         public async Task<bool> checkPermisionForEditAsync(int? noteid, User user)
         {
             if (noteid == null) return false;
-            var con = await _appDbContext.NoteUsers.Include(n=>n.Note).Where(n => n.UserId == user.Id && n.Note.Id == noteid).FirstOrDefaultAsync();
+            if ((await _appDbContext.Notes.Include(n=>n.Owner).Where(n=>n.Id == noteid ).FirstOrDefaultAsync())?.Owner.Id==user.Id) return true;
+            var con = await _appDbContext.NoteUsers.Include(n=>n.Note).Where(n => n.UserId == user.Id && n.Note.Id == noteid || n.Note.Owner.Id==user.Id).FirstOrDefaultAsync();
             if (con==null) return false;
             return con.CanEdit;
         }
@@ -24,7 +25,8 @@ namespace NoteApp.Server.Services
         public async Task<bool> checkPermisionForViewAsync(int? noteid, User user)
         {
             if (noteid == null) return false;
-            var con=await _appDbContext.NoteUsers.Include(n => n.Note).Where(n => n.UserId == user.Id && n.Note.Id == noteid).FirstOrDefaultAsync();
+
+            var con=await _appDbContext.NoteUsers.Include(n => n.Note).Where(n => n.UserId == user.Id && n.Note.Id == noteid || n.Note.Owner.Id == user.Id).FirstOrDefaultAsync();
             return con!=null;
         }
     }
