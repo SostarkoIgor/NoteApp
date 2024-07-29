@@ -11,5 +11,7 @@ namespace NoteApp.Server.Interfaces
         public Task<bool> addOrUpdateUserNotePermissionAsync(int? noteid, string usermail, bool canEdit=false);
         public Task<bool> removeUserNotePermissionAsync(int noteid, string usermail);
         public Task<IEnumerable<IEnumerable<string>>> getUserPermissionsForNoteAsync(int noteid);
+        public Task removeAllNotePermisionsAsync(int id);
+        public Task<bool> setPermissionsAsync(int id, List<List<string>>? permissions, User user);
     }
 }

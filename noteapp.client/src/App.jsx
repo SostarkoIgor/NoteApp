@@ -30,6 +30,7 @@ const Content = () => {
                 <Route path="/viewnote/:id" element={<Authorize><ViewNote /></Authorize>} />
                 <Route path="/createeditnote/:id?" element={<Authorize><CreateEditNote /></Authorize>} />
                 <Route path="/:id?" element={<Authorize><Home /></Authorize>} />
+                <Route path="/publicnotes" element={<Authorize><Home /></Authorize>} />
             </Routes>
         </div>
     );

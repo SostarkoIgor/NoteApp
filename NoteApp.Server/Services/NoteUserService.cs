@@ -70,8 +70,14 @@ namespace NoteApp.Server.Services
 
         public async Task<IEnumerable<IEnumerable<string>>> getUserPermissionsForNoteAsync(int noteid)
         {
-            var noteUsers=await _appDbContext.NoteUsers.Where(n=>n.NoteId==noteid).Select(n=>new List<string>() { n.User.Email, n.CanEdit==true?"edit":"view"}).ToListAsync();
+            var noteUsers=await _appDbContext.NoteUsers.Where(n=>n.NoteId==noteid).Select(n=>new List<string>() { n.User.Email, n.CanEdit==true?"true":"false"}).ToListAsync();
             return noteUsers;
+        }
+
+        public async Task removeAllNotePermisionsAsync(int id)
+        {
+            _appDbContext.RemoveRange(await _appDbContext.NoteUsers.Where(n=>n.NoteId==id).ToListAsync());
+            await _appDbContext.SaveChangesAsync();
         }
 
         public async Task<bool> removeUserNotePermissionAsync(int noteid, string usermail)
@@ -80,6 +86,20 @@ namespace NoteApp.Server.Services
             if (pr==null) return false;
             _appDbContext.NoteUsers.Remove(pr);
             await _appDbContext.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> setPermissionsAsync(int id, List<List<string>>? permissions, User user)
+        {
+            if (permissions == null) return false;
+            if (!await checkPermissionForEditAsync(id, user))
+            {
+                return false;
+            }
+            await removeAllNotePermisionsAsync(id);
+            foreach (var permission in permissions)
+            {
+                await addOrUpdateUserNotePermissionAsync(id, permission[0], permission[1] == "true");
+            }
             return true;
         }
     }

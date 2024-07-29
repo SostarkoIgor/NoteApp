@@ -13,10 +13,10 @@ function Navbar() {
             <h3>NoteApp</h3>
         </div>
         <div className='nav-links'>
-            <a className='nav-link' onClick={()=>navigate('/publicnotes')}>Public notes</a>
-            <a className='nav-link' onClick={()=>navigate('/mynotes')}>My notes</a>
-            <a className='nav-link' onClick={()=>navigate('/profile')}>Profile {userData}</a>
-            <a className='nav-link' onClick={()=>navigate('/createeditnote')}>Create note</a>
+            <a className='nav-link' onClick={()=>navigate('/publicnotes')}>Notes shared with me</a>
+            <a className='nav-link' onClick={()=>window.location.href = '/'}>My notes</a>
+              <a className='nav-link' onClick={() => navigate('/profile')}>Profile {userData}</a>
+              <a className='nav-link' onClick={() => window.location.href = '/createeditnote'}>Create note</a>
             <LogoutLink className='nav-link'>Logout</LogoutLink>
         </div>
     </div>

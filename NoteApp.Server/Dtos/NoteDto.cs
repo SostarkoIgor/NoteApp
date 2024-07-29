@@ -5,5 +5,6 @@
         public string? Title { get; set; }
         public string? Text { get; set; }
         public string? Image { get; set; }
+        public List<List<string>>? Permissions {  get; set; }  
     }
 }

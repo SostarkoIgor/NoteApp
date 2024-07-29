@@ -1,28 +1,26 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import {AuthData} from '../Components/Authorize.jsx';
 import { useContext, useState, useEffect } from 'react'
-import ReactComponent from '../Components/ReactComponent.jsx'
 import '../Styles/Home.css'
 import SmallNote from '../Components/SmallNote.jsx';
 
-function Home() {
+function PublicNotes() {
     const navigate=useNavigate()
     const userData=useContext(AuthData)
     const [notes, setNotes]=useState()
     const [error, setError] = useState("")
-    const { email } = useParams()
 
     useEffect(() => {
         async function start() {
             setError("")
-            let user=email===undefined?"":email
             try {
-                let resp = await fetch("/api/note/getusernotes/"+user, {
+                let resp = await fetch("/api/note/getnotessharedwithuser/", {
                     method: "GET"
                 })
 
                 if (resp.status == 200) {
                     let j = await resp.json()
+                    console.log(j)
                     setNotes(j)
                 }
                 else {
@@ -49,4 +47,4 @@ function Home() {
     )
 }
 
-export default Home;
+export default PublicNotes;

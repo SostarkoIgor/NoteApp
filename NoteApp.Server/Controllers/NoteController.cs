@@ -15,7 +15,7 @@ namespace NoteApp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class NoteController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -60,6 +60,8 @@ namespace NoteApp.Server.Controllers
 
                 await _noteService.SaveNoteAsync(note);
 
+                await _noteUserService.setPermissionsAsync(note.Id, noteDto.Permissions, user);
+
                 return CreatedAtAction(nameof(CreateOrEditNote), noteDto);
             }
             else
@@ -73,6 +75,7 @@ namespace NoteApp.Server.Controllers
                     note.Image=noteDto.Image ?? note.Image;
                     note.DateUpdated = DateTime.Now;
                     await _noteService.UpdateNoteAsync(note);
+                    await _noteUserService.setPermissionsAsync(note.Id, noteDto.Permissions, user);
                     return Ok(noteDto);
                 }
                 else return Forbid();
@@ -143,6 +146,9 @@ namespace NoteApp.Server.Controllers
         {
             return Ok(await _noteUserService.getNotesSharedWithUserAsync(await _userService.GetUserAsync()));
         }
+
+        
+
     }
     
 }
