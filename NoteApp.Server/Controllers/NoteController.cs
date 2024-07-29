@@ -43,7 +43,7 @@ namespace NoteApp.Server.Controllers
             var user = await _userService.GetUserAsync();
             if (user == null)
             {
-                return NotFound("User not found.");
+                return NotFound();
             }
             if (id == null || !noteExists)
             {
@@ -64,7 +64,7 @@ namespace NoteApp.Server.Controllers
             }
             else
             {
-                bool canEdit = await _noteUserService.checkPermisionForEditAsync(id, user);
+                bool canEdit = await _noteUserService.checkPermissionForEditAsync(id, user);
                 if (canEdit)
                 {
                     Note? note= await _noteService.GetNoteByIdAsync(id);
@@ -75,7 +75,7 @@ namespace NoteApp.Server.Controllers
                     await _noteService.UpdateNoteAsync(note);
                     return Ok(noteDto);
                 }
-                else return Forbid("User not allowed to edit this note.");
+                else return Forbid();
             }
         }
         [HttpGet("getusernotes")]
@@ -87,7 +87,7 @@ namespace NoteApp.Server.Controllers
             {
                 if (user == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound();
                 }
                 var notes= await _noteService.GetUserNotesAsync(user);
                 return Ok(notes);
@@ -97,19 +97,22 @@ namespace NoteApp.Server.Controllers
                 var notes = await _noteService.GetUserNotesAsync(user);
                 return Ok(notes);
             }
-            else return BadRequest("Implement later");
+            else
+            {
+                return Ok(await _noteUserService.getNotesSharedWithUserFromUserAsync(user, mail));
+            }
         }
         [HttpGet("getnotebyid/{id}")]
         public async Task<ActionResult<Note>> GetNoteById([FromRoute] int? id)
         {
             if (id == null)
             {
-                return BadRequest("No id given.");
+                return BadRequest();
             }
             Note? note = await _noteService.GetNoteByIdAsync(id);
             if (note == null)
             {
-                return NotFound("No note with given id found.");
+                return NotFound();
             }
             if (note.Owner.Id== (await _userService.GetUserAsync())?.Id)
             {
@@ -117,12 +120,28 @@ namespace NoteApp.Server.Controllers
             }
             else
             {
-                if (await _noteUserService.checkPermisionForViewAsync(id, await _userService.GetUserAsync()))
+                if (await _noteUserService.checkPermissionForViewAsync(id, await _userService.GetUserAsync()))
                 {
                     return Ok(note);
                 }
-                else return Forbid("No permission to view this note.");
+                else return Forbid();
             }
+        }
+        [HttpGet("getnoteuserpermissions/{id}")]
+        public async Task<ActionResult<IEnumerable<IEnumerable<string>>>> getNoteUsersWithPermissions(int id)
+        {
+            if (!await _noteUserService.checkPermissionForEditAsync(id, await _userService.GetUserAsync()))
+            {
+                return Forbid();
+            }
+            var perms=await _noteUserService.getUserPermissionsForNoteAsync(id);
+            return Ok(perms);
+
+        }
+        [HttpGet("getnotessharedwithuser")]
+        public async Task<ActionResult<IEnumerable<Note>>> getNotesSharedWithUser()
+        {
+            return Ok(await _noteUserService.getNotesSharedWithUserAsync(await _userService.GetUserAsync()));
         }
     }
     
