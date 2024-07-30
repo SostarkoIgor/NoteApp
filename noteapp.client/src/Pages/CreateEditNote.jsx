@@ -14,6 +14,9 @@ function CreateEditNote() {
     const [user, setUser] = useState("")
     const [canEdit, setCanEdit] = useState(false)
 
+    const [permited, setPermited] = useState(false)
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
         async function start() {
             if (id) {
@@ -36,19 +39,26 @@ function CreateEditNote() {
                             })
                             
                             if (resp.status == 200) {
-                                
+                                setLoading(false)
                                 let note = await resp.json()
                                 setTitle(note.title)
                                 setText(note.text)
                                 setImageBase64(note.image)
+                                setPermited(true)
                                 setFormTitle("Edit Note")
                             }
                         } catch (e) {
                             console.log(e)
+                            setLoading(false)
                         }
+                    }
+                    else if (resp.status == 403) {
+                        setPermited(false)
+                        setLoading(false)
                     }
                 } catch (e) {
                     console.log(e)
+                    setLoading(false)
                     window.location.href = "/"
                 }
             }
@@ -115,6 +125,21 @@ function CreateEditNote() {
         setUserPermissions(updatedPermissions)
     }
 
+    if (loading) {
+        return (
+            <div>
+                <h1>Loading...</h1>
+            </div>
+        )
+    }
+    else if (!permited) {
+        return (
+            <div>
+                <h1>Access Denied</h1>
+            </div>
+        )
+    }
+    else
     return (
         <div className="form-content-div">
             <h2>{formTitle}</h2>

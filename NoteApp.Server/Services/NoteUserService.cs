@@ -9,11 +9,13 @@ namespace NoteApp.Server.Services
     public class NoteUserService : INoteUserService {
         private readonly AppDbContext _appDbContext;
         private readonly UserManager<User> _userManager;
+        private readonly INoteService _noteService;
 
-        public NoteUserService(AppDbContext appDbContext, UserManager<User> userManager)
+        public NoteUserService(AppDbContext appDbContext, UserManager<User> userManager, INoteService noteService)
         {
             _appDbContext = appDbContext;
             _userManager = userManager;
+            _noteService = noteService;
         }
 
         public async Task<bool> addOrUpdateUserNotePermissionAsync(int? noteid, string usermail, bool canEdit = false)
@@ -96,9 +98,10 @@ namespace NoteApp.Server.Services
                 return false;
             }
             await removeAllNotePermisionsAsync(id);
+            var usermail=(await _noteService.GetNoteByIdAsync(id)).Owner.Email;
             foreach (var permission in permissions)
             {
-                if (permission[0]==user.Email) { continue; }
+                if (permission[0]==usermail) { continue; }
                 await addOrUpdateUserNotePermissionAsync(id, permission[0], permission[1] == "true");
             }
             return true;
