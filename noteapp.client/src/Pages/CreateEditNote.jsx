@@ -18,28 +18,30 @@ function CreateEditNote() {
         async function start() {
             if (id) {
                 try {
-                    let resp = await fetch("/api/Note/getnotebyid/" + id, {
+                    let resp = await fetch("/api/Note/getnoteuserpermissions/" + id, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
                         },
                     })
                     if (resp.status == 200) {
-                        let note = await resp.json()
-                        setTitle(note.title)
-                        setText(note.text)
-                        setImageBase64(note.image)
-                        setFormTitle("Edit Note")
+                        let permissions = await resp.json()
+                        setUserPermissions(permissions)
                         try {
-                            let resp = await fetch("/api/Note/getnoteuserpermissions/" + id, {
+                            let resp = await fetch("/api/Note/getnotebyid/" + id, {
                                 method: "GET",
                                 headers: {
                                     "Content-Type": "application/json",
                                 },
                             })
+                            
                             if (resp.status == 200) {
-                                let permissions = await resp.json()
-                                setUserPermissions(permissions)
+                                
+                                let note = await resp.json()
+                                setTitle(note.title)
+                                setText(note.text)
+                                setImageBase64(note.image)
+                                setFormTitle("Edit Note")
                             }
                         } catch (e) {
                             console.log(e)
@@ -47,6 +49,7 @@ function CreateEditNote() {
                     }
                 } catch (e) {
                     console.log(e)
+                    window.location.href = "/"
                 }
             }
         }
@@ -103,7 +106,7 @@ function CreateEditNote() {
     }
 
     function changeCanEdit(value, index) {
-        const updatedPermissions = userPermissions.map((e, i) => i === index ? [e[0], value] : e)
+        const updatedPermissions = userPermissions.map((e, i) => i === index ? [e[0], value===true?"true":"false"] : e)
         setUserPermissions(updatedPermissions)
     }
 

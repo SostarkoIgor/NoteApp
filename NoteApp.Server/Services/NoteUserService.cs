@@ -70,7 +70,7 @@ namespace NoteApp.Server.Services
 
         public async Task<IEnumerable<IEnumerable<string>>> getUserPermissionsForNoteAsync(int noteid)
         {
-            var noteUsers=await _appDbContext.NoteUsers.Where(n=>n.NoteId==noteid).Select(n=>new List<string>() { n.User.Email, n.CanEdit==true?"true":"false"}).ToListAsync();
+            var noteUsers=await _appDbContext.NoteUsers.Where(n=>n.NoteId==noteid).Select(n=>new List<string>() { n.User.Email, n.CanEdit?"true":"false"}).ToListAsync();
             return noteUsers;
         }
 
@@ -98,6 +98,7 @@ namespace NoteApp.Server.Services
             await removeAllNotePermisionsAsync(id);
             foreach (var permission in permissions)
             {
+                if (permission[0]==user.Email) { continue; }
                 await addOrUpdateUserNotePermissionAsync(id, permission[0], permission[1] == "true");
             }
             return true;

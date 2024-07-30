@@ -15,7 +15,7 @@ namespace NoteApp.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class NoteController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -125,7 +125,7 @@ namespace NoteApp.Server.Controllers
             {
                 if (await _noteUserService.checkPermissionForViewAsync(id, await _userService.GetUserAsync()))
                 {
-                    return Ok(note);
+                    return Ok(new Note { DateCreated=note.DateCreated, DateUpdated=note.DateUpdated, Id=note.Id, Image=note.Image, Text=note.Text, Title=note.Title });
                 }
                 else return Forbid();
             }
