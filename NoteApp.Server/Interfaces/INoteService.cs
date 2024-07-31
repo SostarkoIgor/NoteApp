@@ -9,5 +9,6 @@ namespace NoteApp.Server.Interfaces
         public Task<bool> GetIfNoteWithIDExistsAsync(int? id);
         public Task<Note> SaveNoteAsync(Note note);
         public Task<Note> UpdateNoteAsync(Note note);
+        public Task<bool> DeleteNoteAsync(int id);
     }
 }

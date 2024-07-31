@@ -15,9 +15,8 @@ function Navbar() {
         <div className='nav-links'>
             <a className='nav-link' onClick={()=>navigate('/publicnotes')}>Notes shared with me</a>
             <a className='nav-link' onClick={()=>window.location.href = '/'}>My notes</a>
-              <a className='nav-link' onClick={() => navigate('/profile')}>Profile {userData}</a>
-              <a className='nav-link' onClick={() => window.location.href = '/createeditnote'}>Create note</a>
-            <LogoutLink className='nav-link'>Logout</LogoutLink>
+            <a className='nav-link' onClick={() => window.location.href = '/createeditnote'}>Create note</a>
+            <LogoutLink className='nav-link'>Logout {userData}</LogoutLink>
         </div>
     </div>
   );

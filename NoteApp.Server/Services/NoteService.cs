@@ -14,6 +14,18 @@ namespace NoteApp.Server.Services
             _appDbContext = appDbContext;
         }
 
+        public async Task<bool> DeleteNoteAsync(int id)
+        {
+            var rez=await _appDbContext.Notes.Where(n => n.Id == id).FirstOrDefaultAsync();
+            if (rez == null)
+            {
+                return false;
+            }
+            _appDbContext.Notes.Remove(rez);
+            _appDbContext.SaveChanges();
+            return true;
+        }
+
         public async Task<bool> GetIfNoteWithIDExistsAsync(int? id)
         {
             if (id == null) return false;
@@ -49,5 +61,7 @@ namespace NoteApp.Server.Services
             await _appDbContext.SaveChangesAsync();
             return note;
         }
+
+
     }
 }

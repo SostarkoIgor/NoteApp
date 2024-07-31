@@ -9,6 +9,7 @@ using NoteApp.Server.Interfaces;
 using NoteApp.Server.Models;
 using NoteApp.Server.Services;
 using System.Security.Claims;
+using System.Text.Json;
 using static Azure.Core.HttpHeader;
 
 namespace NoteApp.Server.Controllers
@@ -37,8 +38,9 @@ namespace NoteApp.Server.Controllers
         }
         [HttpPost("createoreditnote")]
         [HttpPost("createoreditnote/{id}")]
-        public async Task<IActionResult> CreateOrEditNote([FromBody] NoteDto noteDto, [FromRoute] int? id)
+        public async Task<IActionResult> CreateOrEditNote([FromForm] string noteDto_, [FromForm] IFormFile? image, [FromForm] string? odlimgpath, [FromRoute] int? id)
         {
+            var noteDto = JsonSerializer.Deserialize<NoteDto>(noteDto_);
             bool noteExists = await _noteService.GetIfNoteWithIDExistsAsync(id);
             var user = await _userService.GetUserAsync();
             if (user == null)
@@ -52,12 +54,32 @@ namespace NoteApp.Server.Controllers
                 {
                     Title = noteDto.Title ?? "",
                     Text = noteDto.Text ?? "",
-                    Image = noteDto.Image ?? "",
+                    Image = "",
                     DateCreated = DateTime.Now,
                     DateUpdated = null,
                     Owner = user
                 };
-
+                if (image != null || image.Length > 0)
+                {
+                    string path = $"Images/{user.Email}";
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    string filename=$"{path}/{Path.GetFileNameWithoutExtension(image.FileName)}_{DateTime.Now.Ticks}{Path.GetExtension(image.FileName)}";
+                    try
+                    {
+                        using (var stream = new FileStream(filename, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return StatusCode(500, "Error uploading image.");
+                    }
+                    note.Image = filename;
+                }
                 await _noteService.SaveNoteAsync(note);
 
                 await _noteUserService.setPermissionsAsync(note.Id, noteDto.Permissions, user);
@@ -72,8 +94,35 @@ namespace NoteApp.Server.Controllers
                     Note? note= await _noteService.GetNoteByIdAsync(id);
                     note.Title=noteDto.Title ?? note.Title;
                     note.Text=noteDto.Text ?? note.Text;
-                    note.Image=noteDto.Image ?? note.Image;
                     note.DateUpdated = DateTime.Now;
+                    if (image != null && image.Length > 0)
+                    {
+                        string path = $"Images/{user.Email}";
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        string filename = $"{path}/{Path.GetFileNameWithoutExtension(image.FileName)}_{DateTime.Now.Ticks}{Path.GetExtension(image.FileName)}";
+                        try
+                        {
+                            using (var stream = new FileStream(filename, FileMode.Create))
+                            {
+                                await image.CopyToAsync(stream);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            return StatusCode(500, "Error uploading image.");
+                        }
+                        note.Image = filename;
+                    }
+                    if (odlimgpath != null)
+                    {
+                        if (System.IO.File.Exists(odlimgpath))
+                        {
+                            System.IO.File.Delete(odlimgpath);
+                        }
+                    }
                     await _noteService.UpdateNoteAsync(note);
                     await _noteUserService.setPermissionsAsync(note.Id, noteDto.Permissions, user);
                     return Ok(noteDto);
@@ -147,7 +196,24 @@ namespace NoteApp.Server.Controllers
             return Ok(await _noteUserService.getNotesSharedWithUserAsync(await _userService.GetUserAsync()));
         }
 
-        
+        [HttpDelete("deletenote/{id}")]
+        public async Task<IActionResult> deleteNote([FromRoute] int id)
+        {
+            if (await _noteUserService.checkPermissionForEditAsync(id, await _userService.GetUserAsync()))
+            {
+                var noteimg=(await _noteService.GetNoteByIdAsync(id)).Image;
+                if (await _noteService.DeleteNoteAsync(id))
+                {
+                    if (System.IO.File.Exists(noteimg))
+                    {
+                        System.IO.File.Delete(noteimg);
+                    }
+                    return Ok();
+                }
+                else return NotFound();
+            }
+            return Forbid();
+        }
 
     }
     

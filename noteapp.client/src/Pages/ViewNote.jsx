@@ -41,7 +41,7 @@ function ViewNote(){
         <p className="view-note-text">{note?.text}</p>
         <p className="view-note-date">Created: {note?.dateCreated}</p>
         <p className="view-note-date">Edited: {note?.dateUpdated??"Never"}</p>
-        <img className="view-note-img" src={note?.image} alt="No image"/>
+        <img className="view-note-img" src={"https://localhost:7107/"+note?.image} alt="No image"/>
         <br/>
         <button className="edit-note" onClick={() => navigate("/createeditnote/" + id)}>Edit</button>
     </div>
