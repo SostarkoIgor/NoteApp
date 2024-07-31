@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using NoteApp.Server.Data;
 using NoteApp.Server.Interfaces;
 using NoteApp.Server.Models;
@@ -18,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<INoteService, NoteService>();
 builder.Services.AddScoped<INoteUserService, NoteUserService>();
@@ -25,8 +27,14 @@ builder.Services.AddScoped<INoteUserService, NoteUserService>();
 var app = builder.Build();
 
 app.UseDefaultFiles();
-app.UseStaticFiles();
+//app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = new PathString("/Images")
+});
 app.MapIdentityApi<User>();
+
 
 app.MapPost("/logout", async (SignInManager<User> manager) =>
 {

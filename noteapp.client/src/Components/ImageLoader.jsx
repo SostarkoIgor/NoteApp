@@ -8,16 +8,16 @@ function ImageLoader({updateFormImage, initialImg}) {
 
   useEffect(() => {
     if (initialImg) {
-        setImageBase64(initialImg)
+        setImageBase64("https://localhost:7107/"+initialImg)
     }
   }, [initialImg])
   const handleImageChange = (e) => {
     const file = e.target.files[0]
+    updateFormImage(e.target.files[0])
     const reader = new FileReader()
 
     reader.onloadend = () => {
         setImageBase64(reader.result)
-        updateFormImage(reader.result)
         setErrorMessage("")
     }
       
@@ -46,7 +46,7 @@ function ImageLoader({updateFormImage, initialImg}) {
           <div className="image-container">
             <img
               src={imageBase64}
-              alt="Uploaded"
+              alt="Error with display"
               className="image-preview"
             />
           </div>
