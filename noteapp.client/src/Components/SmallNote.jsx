@@ -1,4 +1,4 @@
-import '../Styles/SmallNote.css';
+import styles from '../Styles/SmallNote.module.css';
 import { useNavigate } from 'react-router-dom';
 
 function SmallNote({index, image, title, datecr, dateedit}) {
@@ -37,14 +37,16 @@ function SmallNote({index, image, title, datecr, dateedit}) {
     return String(date.getFullYear()) + " " + String(date.getMonth() + 1).padStart(2, '0') + " " + String(date.getDate()).padStart(2, '0')
   }
   return (
-    <div className="small-note">
-      <div><img className="small-note-img" src={"https://localhost:7107/"+image} alt="No image"></img></div>
+    <div className={styles.smallnote}>
+      <button className={styles.smallnotedelete} onClick={() => handleDelete()}>&#10006;</button>
+      {image==="" ? <div className={styles.imagecontainer}><img className={styles.smallnoteimg} src="https://via.placeholder.com/150?text=No+Image" alt="No image"></img></div> : 
+      <div className={styles.imagecontainer}><img className={styles.smallnoteimg} src={"https://localhost:7107/"+image} alt="No image"></img></div>}
       <div>
-      <h3 className="small-note-title">{title}</h3>
-      <p className="small-note-date">Created: {formatDate(datecr)}</p>
-      <p className="small-note-date">Edited: {formatDate(dateedit)}</p>
-      <button className="small-note-open" onClick={() => navigate(`/viewnote/${index}`)}>Open</button>
-      <button className="small-note-delete" onClick={() => handleDelete()}>Delete</button>
+      <h3 className={styles.smallnotetitle}>{title}</h3>
+      <p className={styles.smallnotedate}>Created: {formatDate(datecr)}</p>
+      <p className={styles.smallnotedate}>Edited: {formatDate(dateedit)}</p>
+      <button className={styles.smallnoteopen} onClick={() => navigate(`/viewnote/${index}`)}>Open</button>
+      
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import {AuthData} from '../Components/Authorize.jsx';
 import { useContext, useState, useEffect } from 'react'
 import ReactComponent from '../Components/ReactComponent.jsx'
-import '../Styles/Home.css'
+import styles from '../Styles/Home.module.css'
 import SmallNote from '../Components/SmallNote.jsx';
 
 function Home() {
@@ -39,13 +39,13 @@ function Home() {
         start()
     }, [])
     return (
-        <>
+        <div className={styles.container}>
         {notes===undefined && <p>Loading...</p>}
         {notes!=undefined && error==="" && notes.map((note, index) => (
             <SmallNote key={index} index={note.id} image={note.image} title={note.title} datecr={note.dateCreated} dateedit={note.dateUpdated}/>
         ))}
             {error != "" && <p>{error}</p>}
-        </>
+        </div>
     )
 }
 

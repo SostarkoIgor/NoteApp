@@ -6,10 +6,14 @@
     
 }
 :root{
-    --first-color:#2274A5;
-    --second-color:#E7DFC6;
-    --third-color:#E9F1F7;
-    --fourth-color:#131B23;
-    --fifth-color:#816C61;
+    --first-color:#252422;
+    --second-color:#403D39;
+    --third-color:#FCA311;
+    --fourth-color:#CCC5B9;
+    --fifth-color:#FFFCF2;
+
+    --font-color1:#333;
+    --font-color2:#666;
+    --font-color-items:white;
 }
 
