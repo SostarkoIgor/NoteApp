@@ -1,0 +1,57 @@
+.smallnote {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem;
+    background-color: var(--third-color);
+    width: min(40%, 200px);
+  }
+  
+  .smallnoteimg {
+    width: min(70%, 200px);
+    margin: auto;
+    object-fit: cover;
+    border-radius: 4px;
+    aspect-ratio: 1 / 1;
+  }
+  
+  .smallnotetitle {
+    font-size: 1.2em;
+    margin: 0;
+    color: #333;
+  }
+  
+  .smallnotedate {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .smallnoteopen,
+  .smallnotedelete {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
+    margin: 4px;
+  }
+  
+  .smallnoteopen:hover,
+  .smallnotedelete:hover {
+    background-color: #0056b3;
+  }
+  
+  .smallnotedelete {
+    background-color: #dc3545;
+  }
+  
+  .smallnotedelete:hover {
+    background-color: #c82333;
+  }
+  

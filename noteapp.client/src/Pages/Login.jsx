@@ -1,21 +1,25 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../Styles/Login.css'
-
+import styles from '../Styles/Login.module.css'
+import Loader from '../Components/Loader.jsx'
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const [message, setMessage] = useState("")
+    const [passwordInput, setPasswordInput] = useState("password")
 
     const navigator = useNavigate()
 
     const handleSubmit = (e) => {
-        setMessage("")
         e.preventDefault()
+        setMessage("")
+        
         if (email === "" || password === "") {
             setMessage("Fill in email and password")
         } else {
+            setLoading(true)
             fetch("/login?useSessionCookies=true", {
                 method: "POST",
                 headers: {
@@ -30,9 +34,12 @@ function Login() {
                 }
             }).catch(e => {
                 setMessage("Error")
+            }).finally(() => {
+                setLoading(false)
             })
 
         }
+        
     }
 
     const onChange = (e) => {
@@ -42,17 +49,18 @@ function Login() {
             setPassword(e.target.value)
         }
     }
+
     return (
-    <>
-        <div className="form-container">
-            <div className='title-div'>
+    <div className={styles.pagecontainer}>
+        <div className={styles.formcontainer}>
+            <div className={styles.titlediv}>
             <h2>Login</h2>
             <h4>Login to access your notes</h4>
             </div>
                 
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <label className="form-label" htmlFor="email">
+                        <label className={styles.formlabel} htmlFor="email">
                         Email:
                         </label>
                     </div>
@@ -65,22 +73,28 @@ function Login() {
                         </label>
                     </div>
                     <div>
-                        <input type="password" id="password-form" name="password" value={password} onChange={onChange} />
+                        <input type={passwordInput} id="password-form" name="password" value={password} onChange={onChange} />
                     </div>
                     <div>
-                    <button type="submit">Login</button>
-                    </div>
-                    <div className='link-class'>
-                        <a onClick={()=>navigator("/register") }>Register</a>
+                        <input type="checkbox" id="show-password" name="show-password" onClick={() => { setPasswordInput(passwordInput === "password" ? "text" : "password") }} />
+                        <label htmlFor="show-password">Show password</label>
                     </div>
                     <div>
-                        <p className="submit-message">
+                        {loading ? <Loader /> : 
+                            <button type="submit">Login</button>}
+                    </div>
+                    {loading ? <div></div> :
+                        <div className={styles.linkclass}>
+                            <a onClick={() => navigator("/register")}>Register</a>
+                        </div>}
+                    <div>
+                        <p className={styles.submitmessage}>
                             {message}
                         </p>
                     </div>
                 </form>
         </div>
-    </>
+    </div>
   );
 }
 
