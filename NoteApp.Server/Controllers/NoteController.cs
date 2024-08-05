@@ -59,7 +59,7 @@ namespace NoteApp.Server.Controllers
                     DateUpdated = null,
                     Owner = user
                 };
-                if (image != null || image.Length > 0)
+                if (!(image == null || image.Length == 0))
                 {
                     string path = $"Images/{user.Email}";
                     if (!Directory.Exists(path))

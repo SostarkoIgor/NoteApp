@@ -11,9 +11,10 @@
     width: min(40%, 200px);
     height: fit-content;
     position: relative;
+    transition: filter 0.5s ease-in-out;
   }
   .smallnote:hover {
-    scale: 1.05;
+    filter: brightness(80%);
   }
   
   .smallnoteimg {
@@ -60,7 +61,7 @@
     font-size: large;
     color: var(--font-color2);
     position:absolute;
-    width: max(1rem, 5%);
+    width: max(1.01rem, 5%);
     aspect-ratio: 1 / 1;
     line-height: 0%;
     top: 5px;
@@ -68,8 +69,8 @@
   }
   
   .smallnotedelete:hover {
-    scale: 1.1;
     cursor: pointer;
+    scale: 1.2;
   }
   .imagecontainer {
     width: 100%;

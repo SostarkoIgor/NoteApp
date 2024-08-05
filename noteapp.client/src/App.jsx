@@ -23,7 +23,7 @@ const Content = () => {
     const showNavbar = !['/login', '/register'].includes(location.pathname);
 
     return (
-        <div>
+        <>
             {showNavbar && <Authorize><Navbar /></Authorize>}
             <Routes>
                 <Route path="/login" element={<Login />} />
@@ -33,7 +33,7 @@ const Content = () => {
                 <Route path="/:id?" element={<Authorize><Home /></Authorize>} />
                 <Route path="/publicnotes" element={<Authorize><PublicNotes /></Authorize>} />
             </Routes>
-        </div>
+        </>
     );
 }
 

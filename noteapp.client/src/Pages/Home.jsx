@@ -4,14 +4,14 @@ import { useContext, useState, useEffect } from 'react'
 import ReactComponent from '../Components/ReactComponent.jsx'
 import styles from '../Styles/Home.module.css'
 import SmallNote from '../Components/SmallNote.jsx';
-
+import Loader from '../Components/Loader.jsx'
 function Home() {
     const navigate=useNavigate()
     const userData=useContext(AuthData)
     const [notes, setNotes]=useState()
     const [error, setError] = useState("")
     const { email } = useParams()
-
+    const [loading, setLoading] = useState(true)
     useEffect(() => {
         async function start() {
             setError("")
@@ -34,10 +34,27 @@ function Home() {
                 console.log(e)
                 setError("Error getting notes from server ("+e+")")
             }
+            finally {
+                setLoading(false)
+            }
+            setLoading(false)
         }
 
         start()
     }, [])
+    if (loading) {
+        return <div className={styles.centeringcontainer}>
+            <Loader />
+        </div>
+    }
+    else if (notes.length===0){
+        return <div className={styles.centeringcontainer}>
+            <p className={styles.nonotesfound}>No notes found</p>
+            <br/>
+            <a className={styles.createnotelink} onClick={() => window.location.href = '/createeditnote'}>Create note</a>
+            </div>
+    }
+    else
     return (
         <div className={styles.container}>
         {notes===undefined && <p>Loading...</p>}
