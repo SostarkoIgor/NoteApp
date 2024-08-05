@@ -36,7 +36,7 @@
   
   .smallnotedate {
     font-size: 0.9em;
-    color: var(--font-color2);
+    color: var(--font-color-card-desc);
   }
   
   .smallnoteopen {
@@ -59,7 +59,7 @@
     border: none;
     font-weight: 900;
     font-size: large;
-    color: var(--font-color2);
+    color: var(--font-color-card-desc);
     position:absolute;
     width: max(1.01rem, 5%);
     aspect-ratio: 1 / 1;

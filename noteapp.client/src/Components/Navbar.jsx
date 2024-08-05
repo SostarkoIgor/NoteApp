@@ -22,7 +22,7 @@ function Navbar() {
             <li><a className={styles.navlink} onClick={()=>navigate('/publicnotes')}>Notes shared with me</a></li>
             <li><a className={styles.navlink} onClick={()=>window.location.href = '/'}>My notes</a></li>
             <li><a className={styles.navlink} onClick={() => window.location.href = '/createeditnote'}>Create note</a></li>
-            <li><LogoutLink className={styles.logoutlink}>Logout <a className={styles.username}>{userData}</a></LogoutLink></li>
+            <li><LogoutLink className={styles.logoutlink}>Logout <span className={styles.username}>{userData}</span></LogoutLink></li>
         </ul>
     </div>
   );

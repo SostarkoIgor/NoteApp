@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-
+import styles from '../Styles/ViewNote.module.css'
 function ViewNote(){
     const { id } = useParams()
     const [note, setNote] = useState(null)
@@ -36,14 +36,14 @@ function ViewNote(){
 
     return(
     <>
-    <div className="view-note">
-        <h1 className="view-note-title">{note?.title}</h1>
-        <p className="view-note-text">{note?.text}</p>
-        <p className="view-note-date">Created: {note?.dateCreated}</p>
-        <p className="view-note-date">Edited: {note?.dateUpdated??"Never"}</p>
-        <img className="view-note-img" src={"https://localhost:7107/"+note?.image} alt="No image"/>
+    <div className={styles.container}>
+        <h1 className={styles.viewnotetitle}>{note?.title}</h1>
+        <p className={styles.viewnotetext}>{note?.text}</p>
+        <p className={styles.viewnotedate}>Created: {note?.dateCreated}</p>
+        <p className={styles.viewnotedate}>Edited: {note?.dateUpdated??"Never"}</p>
+        <img className={styles.viewnoteimg} src={"https://localhost:7107/"+note?.image} alt="No image"/>
         <br/>
-        <button className="edit-note" onClick={() => navigate("/createeditnote/" + id)}>Edit</button>
+        <button className={styles.editnote} onClick={() => navigate("/createeditnote/" + id)}>Edit</button>
     </div>
     </>)
 

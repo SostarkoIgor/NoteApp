@@ -51,7 +51,6 @@ function PublicNotes() {
     else
     return (
         <div className={styles.container}>
-        {notes===undefined && <p>Loading...</p>}
         {notes!=undefined && error==="" && notes.map((note, index) => (
             <SmallNote key={index} index={note.id} image={note.image} title={note.title} datecr={note.dateCreated} dateedit={note.dateUpdated}/>
         ))}
