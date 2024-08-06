@@ -1,19 +1,23 @@
 // ImageUploader.jsx
 import React, { useEffect, useState } from 'react';
-import '../Styles/ImageLoader.css'
+import styles from '../Styles/ImageLoader.module.css'
 
 function ImageLoader({updateFormImage, initialImg}) {
   const [imageBase64, setImageBase64] = useState(null)
   const [errorMessage, setErrorMessage] = useState("")
+  const [filename, setFilename] = useState("")
 
   useEffect(() => {
-    if (initialImg) {
+    console.log(initialImg)
+    if (initialImg && initialImg.length>0) {
         setImageBase64("https://localhost:7107/"+initialImg)
+        setFilename("")
     }
-  }, [initialImg])
+  }, [])
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     updateFormImage(e.target.files[0])
+    setFilename(file.name)
     const reader = new FileReader()
 
     reader.onloadend = () => {
@@ -31,29 +35,43 @@ function ImageLoader({updateFormImage, initialImg}) {
     }
   }
 
+  const removeImg = () => {
+    setImageBase64(null)
+    setFilename("")
+    setErrorMessage("")
+    updateFormImage("noimg")
+  }
+
   return (
     <>
-    <div className="image-uploader">
+    <div className={styles.imageuploader}>
+      <label className={styles.upload}>Upload image
       <input
+        className={styles.imageinput}
+        id="file"
+        name='file'
         type="file"
         accept="image/*"
         onChange={handleImageChange}
       />
-
+      </label>
+      {(imageBase64!=null) && <button className={styles.button} type="button" onClick={() => removeImg()}>Delete image</button>}
+      <a className={styles.filename}>{filename}</a>
       {imageBase64 && (
         <div>
-          {errorMessage=="" &&
-          <div className="image-container">
+          {errorMessage=="" && imageBase64.length>0 &&
+          <div className={styles.imagecontainer}>
             <img
               src={imageBase64}
               alt="Error with display"
-              className="image-preview"
+              className={styles.imagepreview}
             />
           </div>
           }
         </div>
       )}
-      <div className="error-message">{errorMessage}</div>
+      
+      {errorMessage.length > 0 && <div className={styles.errormessage}>{errorMessage}</div>}
           </div>
     </>
   );

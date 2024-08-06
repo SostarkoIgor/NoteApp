@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import ImageLoader from "../Components/ImageLoader.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import '../Styles/CreateEditNote.css';
-
+import styles from '../Styles/CreateEditNote.module.css';
+import styles_wn from '../Styles/ViewNote.module.css';
+import Loader from "../Components/Loader.jsx";
 function CreateEditNote() {
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState("");
@@ -52,6 +53,8 @@ function CreateEditNote() {
                         }
                     } else if (resp.status === 403) {
                         setPermited(false);
+                        window.alert("You don't have permission to edit this note");
+                        window.location.href = "/";
                         setLoading(false);
                     }
                 } catch (e) {
@@ -79,7 +82,7 @@ function CreateEditNote() {
             Title: title,
             Text: text,
             Permissions: userPermissions,
-            Image: ""
+            Image: image==="noimg"?"noimg":""
         }));
         
         // Add existing image path if editing
@@ -133,19 +136,20 @@ function CreateEditNote() {
     }
 
     if (loading) {
-        return <div><h1>Loading...</h1></div>;
+        return <div className={styles_wn.centeringcontainer}><Loader/></div>
     } else if (!permited) {
-        return <div><h1>Access Denied</h1></div>;
+        return <div className={styles_wn.centeringcontainer}></div>
     } else {
         return (
-            <div className="form-content-div">
+            <div className={`${styles_wn.container} ${styles.container}`}>
+                <div className={styles_wn.note}>
                 <h2>{formTitle}</h2>
-                <div className="note-form">
                     <form onSubmit={onSubmitForm}>
-                        <div className="form-wrapper-div">
-                            <div><label htmlFor="title">Title</label></div>
+                        <div className={styles.formwrapperdiv}>
+                            <div><label className={styles_wn.title} htmlFor="title">Title: </label></div>
                             <div>
                                 <input
+                                    className={`${styles_wn.viewnotetitle} ${styles.titleinput}`}
                                     type="text"
                                     placeholder="Title"
                                     value={title}
@@ -153,50 +157,59 @@ function CreateEditNote() {
                                 />
                             </div>
                         </div>
-                        <div className="form-wrapper-div">
-                            <label htmlFor="text">Text</label>
+                        
+                        <div><label className={styles_wn.title} htmlFor="title">Title: </label></div>
                             <textarea
-                                className="note-text-input"
+                                className={styles_wn.viewnotetext}
                                 placeholder="Write a note..."
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
+                                name="text"
                             ></textarea>
-                        </div>
-                        <div className="form-wrapper-div">
-                            <div><label htmlFor="image">Image</label></div>
+                        
+                        <div className={styles.formwrapperdiv}>
+                            <div><label className={styles_wn.title} htmlFor="image">Image: </label></div>
                             <div><ImageLoader updateFormImage={updateFormImage} initialImg={image} /></div>
                         </div>
-                        <div className="form-wrapper-div">
+                        <a className={styles_wn.title}>Users: </a>
+                        <div className={styles.formwrapperdivadd}>
                             <input
+                                className={styles.userperminput}
                                 type="text"
                                 value={user}
                                 onChange={(e) => setUser(e.target.value)}
                             />
+                            <a>Can edit:</a>
                             <input
+                                className={styles.userperminputchbox}
                                 type="checkbox"
                                 checked={canEdit}
                                 onChange={(e) => setCanEdit(e.target.checked)}
                             />
-                            <button type="button" onClick={addToPermissions}>Add</button>
+                            <button className={styles_wn.editnote} type="button" onClick={addToPermissions}>Add</button>
                         </div>
                         <div className="form-wrapper-div">
                             {userPermissions.map((permission, index) => (
-                                <div key={index}>
-                                    <p>{permission[0]}</p>
-                                    Can edit:
+                                <div key={index} className={styles.userpermdiv}>
+                                    <a style={{fontWeight: "bold"}}>{permission[0]}</a>
+                                    <a>Can edit:</a>
                                     <input
+                                        className={styles.userperminputchbox}
                                         type="checkbox"
                                         checked={permission[1] === "true"}
                                         onChange={(e) => changeCanEdit(e.target.checked, index)}
                                     />
-                                    <button type="button" onClick={() => removeFromPermissions(index)}>Remove</button>
+                                    
+                                    <button className={styles_wn.editnote} type="button" onClick={() => removeFromPermissions(index)}>Remove</button>
+                                    
                                 </div>
                             ))}
                         </div>
-                        <input type="submit" value="Submit"></input>
+                        <input className={styles_wn.editnote} type="submit" value="Submit"></input>
+                        <button className={styles_wn.editnote} type="button" onClick={() => navigator("/")}>Cancel</button>
                     </form>
                 </div>
-            </div>
+                </div>
         );
     }
 }

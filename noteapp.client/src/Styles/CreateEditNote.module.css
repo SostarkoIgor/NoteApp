@@ -1,0 +1,39 @@
+.titleinput{
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--font-color-card-desc);
+    font-size: 1.3rem;
+}
+
+.userpermdiv, .formwrapperdivadd{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+    padding: 0.5rem;
+    border: 1px solid var(--font-color-card-desc);
+    width: fit-content;
+}
+
+.formwrapperdivadd{
+    background-color: transparent;
+    padding: 0;
+    border: 0;
+}
+
+.userpermdiv *, .formwrapperdivadd *{
+    display: inline-block;
+    margin: 0.3rem !important;
+    padding: auto;
+
+}
+
+.userperminput{
+    padding: 0.3rem;
+    border-radius: 8px;
+    border: 1px solid var(--font-color-card-desc);
+    margin-right: 1rem;
+}
