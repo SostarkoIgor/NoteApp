@@ -19,6 +19,8 @@
 
 .viewnotetitle, .viewnotetext{
     color: var(--font-color1);
+    word-break:break-all;
+    max-width: 800px;
 }
 
 .viewnotetext{
@@ -28,6 +30,7 @@
     border-radius: 8px;
     padding : 1rem;
     min-width: 400px;
+    
     min-height: 200px;
 }
 
