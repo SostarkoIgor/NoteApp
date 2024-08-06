@@ -95,28 +95,39 @@ namespace NoteApp.Server.Controllers
                     note.Title=noteDto.Title ?? note.Title;
                     note.Text=noteDto.Text ?? note.Text;
                     note.DateUpdated = DateTime.Now;
-                    if (image != null && image.Length > 0)
+                    if (!(image == null || image.Length == 0))
                     {
-                        string path = $"Images/{user.Email}";
-                        if (!Directory.Exists(path))
+                        if (noteDto.Image != "noimg")
                         {
-                            Directory.CreateDirectory(path);
-                        }
-                        string filename = $"{path}/{Path.GetFileNameWithoutExtension(image.FileName)}_{DateTime.Now.Ticks}{Path.GetExtension(image.FileName)}";
-                        try
-                        {
-                            using (var stream = new FileStream(filename, FileMode.Create))
+                            string path = $"Images/{user.Email}";
+                            if (!Directory.Exists(path))
                             {
-                                await image.CopyToAsync(stream);
+                                Directory.CreateDirectory(path);
                             }
+                            string filename = $"{path}/{Path.GetFileNameWithoutExtension(image.FileName)}_{DateTime.Now.Ticks}{Path.GetExtension(image.FileName)}";
+                            try
+                            {
+                                using (var stream = new FileStream(filename, FileMode.Create))
+                                {
+                                    await image.CopyToAsync(stream);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                return StatusCode(500, "Error uploading image.");
+                            }
+                            note.Image = filename;
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            return StatusCode(500, "Error uploading image.");
+                            note.Image = string.Empty;
                         }
-                        note.Image = filename;
                     }
-                    if (odlimgpath != null)
+                    if (noteDto.Image=="noimg")
+                    {
+                        note.Image = string.Empty;
+                    }
+                    if (odlimgpath != null && image!=null || noteDto.Image=="noimg")
                     {
                         if (System.IO.File.Exists(odlimgpath))
                         {
